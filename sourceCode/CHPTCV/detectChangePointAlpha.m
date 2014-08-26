@@ -1,0 +1,78 @@
+function iFramesInfo = detectChangePointAlpha(Data, isPlot)
+
+addpath(genpath('\\psf\Home\Desktop\Research\PNNL\sourceCode\CHPTCV'))
+
+%%% Initial plot of data
+z_dataplot=1;% 1 : start by plotting data (+ regression function if available) 0: do nothing
+n  = length(Data);
+%%% Procedures to be considered
+%%% each of the variables z_XXX below correspond to one procedure
+%%% z_XXX = 1 means the procedure will be launched on Data
+%%% z_XXX = 0 means the procedure will not be launched
+z_LOOVF=1;
+z_ERMVF=1;
+z_ERMBM=1;
+z_ZS=1;
+z_PML=1;
+
+%%% Parameters of the procedures
+infos.delta = 1;% (Minimal number of design points between two breakpoints)-1
+V = 5;% How many folds for ERMVF and LooVF ?
+Dimmax = floor(0.9*(n-n/V)/(1+infos.delta));% Maximal dimension considered for all procedures (default choice: our advice for LooVF or ERMVF)
+infos.threshold = floor(0.75*Dimmax);% value of the dimension threshold used in ERMBMthr and PML for the calibration of the penalty 
+
+%%% Plot crit_2(D) as a function of D
+z_plotcrit2 = 1;% 1 : Plot crit_2(D) as a function of D for each procedure considered ; 0 : do nothing
+
+%%% Visualize the partition selected for a given number of breakpoints (uses 'D_chosen')
+z_visuDchosen = 0;% 1 : Plot data + selected partition for each procedure considered ; 0 : do nothing
+D_chosen = 5;% Dimension of the partition to be plotted
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% End of tunable parameters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%
+%%%%%%%%%% 1. Data generation / loading
+%%%%%%%%%%
+
+
+t = (1:numel(Data));
+%t=50:150;
+
+%%% for simulated data, put the values of the signal s(t_1), ... , s(t_n) in the vector 'Reg'
+%%% otherwise, just put zeros in Reg
+
+Reg = zeros(size(Data));
+
+n = numel(Data);
+
+% if z_LOOVF==1
+%     [D_LOOVF, mu_LOOVF, rupt_LOOVF, crit2VF_1LOO, rupt_1LOO, mu_1LOO]=proc_LOOVF(Data, V, Dimmax, infos);
+% end
+
+if z_ERMBM==1
+    [D_ERMBMest, mu_ERMBMest, rupt_ERMBMest, crit2BMest_1ERM, D_ERMBMthr, mu_ERMBMthr, rupt_ERMBMthr, crit2BMthr_1ERM, D_ERMBMmax, mu_ERMBMmax, rupt_ERMBMmax, crit2BMmax_1ERM, rupt_1ERM, mu_1ERM]=proc_ERMBM(Data, Dimmax, infos);
+end
+
+
+% if z_LOOVF==1
+%     figure(11);newplot;
+%     plot(t,mu_LOOVF,'r-',t,Data,'b.');
+%     hold on;
+%     plot(rupt_LOOVF, mu_LOOVF(rupt_LOOVF), '^c')
+%     xlabel('t');ylabel('Y');
+%     legend('[LOO,VF]','data');
+% end
+
+if z_ERMBM==1
+    figure(13);newplot;
+    plot(t,mu_ERMBMest,'r-',t,Data,'b.');
+    hold on;
+    plot(rupt_ERMBMest, mu_ERMBMest(rupt_ERMBMest), '^c')
+    xlabel('t');ylabel('Y');
+    legend('[ERM,BM]','data');
+end
+
+
+end

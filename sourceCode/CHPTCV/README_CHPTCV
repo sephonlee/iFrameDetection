@@ -1,0 +1,30 @@
+**********************************
+Readme file for the CHPTCV package
+**********************************
+
+Illustrates the simulation study of the paper
+'Segmentation of the mean of heteroscedastic data via cross-validation'
+by Sylvain Arlot and Alain Celisse (2010). Statistics and Computing, 1--20. DOI: 10.1007/s11222-010-9196-x. 
+
+(C) Sylvain Arlot and Alain Celisse, 2010.
+
+Last revised: October, 27th 2010
+
+**********************************
+
+Contents:
+
+demo.m		main file, launch it (and tune its parameter) to compare several procedures considered in the paper on your own data or on simulated data
+		Note: our results for the BGH procedure are based on a R program given to us by S. Huet, so it is not included in this package
+
+proc_ERMBM.m	function corresponding to the procedure [ERM,BM]
+proc_ERMVF.m	function corresponding to the procedure [ERM,VF]
+proc_LOOVF.m	function corresponding to the procedure [LOO,VF]
+proc_PML.m	function corresponding to the procedure PML
+proc_ZS.m	function corresponding to the procedure ZS
+
+DataGener.m and Regsig_gener.m are subfunctions used for generating synthetic data as in the paper
+
+the other m-files (chpt1xx2VF.m cout_Risque_emp.m eval_histo.m pente.m prgdyn.m) correspond to subfunctions common to several functions proc_XXX.m
+
+
